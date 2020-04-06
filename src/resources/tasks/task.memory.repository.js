@@ -2,7 +2,7 @@ const Task = require('./task.model');
 
 let data = [];
 
-const getAll = async () => data;
+const getAll = async id => data.filter(i => i.boardId === id);
 const getTaskById = async id => data.find(i => i.id === id);
 const deleteTask = async id => (data = data.filter(i => i.id !== id));
 const deleteTaskByBoard = id => (data = data.filter(i => i.boardId !== id));

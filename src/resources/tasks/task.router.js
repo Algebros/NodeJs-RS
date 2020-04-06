@@ -2,7 +2,7 @@ const router = require('express').Router({ mergeParams: true });
 const taskService = require('./task.service');
 
 router.route('/').get(async (req, res) => {
-  const tasks = await taskService.getAll();
+  const tasks = await taskService.getAll(req.params.id);
   res.json(tasks);
 });
 
