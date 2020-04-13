@@ -1,23 +1,33 @@
-const uuid = require('uuid');
+const { Schema, model } = require('mongoose');
 
-class Board {
-  constructor({
-    id = uuid(),
-    title = 'testTitleBoard',
-    columns = new Column()
-  } = {}) {
-    this.id = id;
-    this.title = title;
-    this.columns = columns;
-  }
-}
+const boardSchema = new Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  columns: Array
+});
 
-class Column {
-  constructor({ id = uuid(), title = 'testTitleColumn', order = 0 } = {}) {
-    this.id = id;
-    this.title = title;
-    this.order = order;
-  }
-}
+module.exports = model('boardSchema', boardSchema);
 
-module.exports = Board;
+// class Board {
+//   constructor({
+//     id = uuid(),
+//     title = 'testTitleBoard',
+//     columns = new Column()
+//   } = {}) {
+//     this.id = id;
+//     this.title = title;
+//     this.columns = columns;
+//   }
+// }
+
+// class Column {
+//   constructor({ id = uuid(), title = 'testTitleColumn', order = 0 } = {}) {
+//     this.id = id;
+//     this.title = title;
+//     this.order = order;
+//   }
+// }
+
+// module.exports = Board;

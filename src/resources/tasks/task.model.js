@@ -1,23 +1,54 @@
-const uuid = require('uuid');
+const { Schema, model, Types } = require('mongoose');
 
-class Task {
-  constructor({
-    id = uuid(),
-    title = 'testTaskTitle',
-    order = 0,
-    description = 'test Desc',
-    userId = null,
-    boardId = null,
-    columnId = null
-  } = {}) {
-    this.id = id;
-    this.title = title;
-    this.order = order;
-    this.description = description;
-    this.userId = userId;
-    this.boardId = boardId;
-    this.columnId = columnId;
+const taskSchema = new Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  order: {
+    type: Number,
+    default: 0
+  },
+  description: {
+    type: String
+  },
+  userId: {
+    type: Types.ObjectId,
+    ref: 'userSchema',
+    default: null
+  },
+  boardId: {
+    type: Types.ObjectId,
+    ref: 'boardSchema',
+    default: null
+  },
+  columnId: {
+    type: Types.ObjectId,
+    ref: 'columnSchema',
+    default: null
   }
-}
+});
 
-module.exports = Task;
+module.exports = model('taskSchema', taskSchema);
+
+// class Task {
+//   constructor({
+//     id = uuid(),
+//     title = 'testTaskTitle',
+//     order = 0,
+//     description = 'test Desc',
+//     userId = null,
+//     boardId = null,
+//     columnId = null
+//   } = {}) {
+//     this.id = id;
+//     this.title = title;
+//     this.order = order;
+//     this.description = description;
+//     this.userId = userId;
+//     this.boardId = boardId;
+//     this.columnId = columnId;
+//   }
+// }
+
+// module.exports = Task;
