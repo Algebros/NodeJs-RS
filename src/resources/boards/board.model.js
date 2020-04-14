@@ -1,33 +1,26 @@
 const { Schema, model } = require('mongoose');
+const columnSchema = require('./column.model');
 
 const boardSchema = new Schema({
   title: {
     type: String,
-    required: true
+    default: 'Board'
   },
-  columns: Array
+  columns: [columnSchema]
 });
 
+boardSchema.statics.toResponse = board => {
+  const toString = Object.prototype.toString;
+  if (toString.call(board) === '[object Array]') {
+    const copyArray = board.slice();
+    copyArray.forEach((item, idx, arr) => {
+      const { id, title, columns } = item;
+      arr[idx] = { id, title, columns };
+    });
+    return copyArray;
+  }
+  const { id, title, columns } = board;
+  return { id, title, columns };
+};
+
 module.exports = model('boardSchema', boardSchema);
-
-// class Board {
-//   constructor({
-//     id = uuid(),
-//     title = 'testTitleBoard',
-//     columns = new Column()
-//   } = {}) {
-//     this.id = id;
-//     this.title = title;
-//     this.columns = columns;
-//   }
-// }
-
-// class Column {
-//   constructor({ id = uuid(), title = 'testTitleColumn', order = 0 } = {}) {
-//     this.id = id;
-//     this.title = title;
-//     this.order = order;
-//   }
-// }
-
-// module.exports = Board;

@@ -2,8 +2,7 @@ const { Schema, model, Types } = require('mongoose');
 
 const taskSchema = new Schema({
   title: {
-    type: String,
-    required: true
+    type: String
   },
   order: {
     type: Number,
@@ -14,18 +13,15 @@ const taskSchema = new Schema({
   },
   userId: {
     type: Types.ObjectId,
-    ref: 'userSchema',
-    default: null
+    ref: 'userSchema'
   },
   boardId: {
     type: Types.ObjectId,
-    ref: 'boardSchema',
-    default: null
+    ref: 'boardSchema'
   },
   columnId: {
     type: Types.ObjectId,
-    ref: 'columnSchema',
-    default: null
+    ref: 'columnSchema'
   }
 });
 

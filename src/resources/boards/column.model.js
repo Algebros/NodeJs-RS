@@ -1,9 +1,9 @@
-const { Schema, model } = require('mongoose');
+const { Schema } = require('mongoose');
 
 const columnSchema = new Schema({
   title: {
     type: String,
-    default: 'test'
+    default: 'Column'
   },
   order: {
     type: Number,
@@ -11,4 +11,4 @@ const columnSchema = new Schema({
   }
 });
 
-module.exports = model('columnSchema', columnSchema);
+module.exports = columnSchema;
