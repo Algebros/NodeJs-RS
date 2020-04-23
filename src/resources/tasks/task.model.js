@@ -40,25 +40,3 @@ taskSchema.statics.toResponse = task => {
 };
 
 module.exports = model('taskSchema', taskSchema);
-
-// class Task {
-//   constructor({
-//     id = uuid(),
-//     title = 'testTaskTitle',
-//     order = 0,
-//     description = 'test Desc',
-//     userId = null,
-//     boardId = null,
-//     columnId = null
-//   } = {}) {
-//     this.id = id;
-//     this.title = title;
-//     this.order = order;
-//     this.description = description;
-//     this.userId = userId;
-//     this.boardId = boardId;
-//     this.columnId = columnId;
-//   }
-// }
-
-// module.exports = Task;
