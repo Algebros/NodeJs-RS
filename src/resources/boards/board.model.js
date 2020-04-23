@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-const columnSchema = require('./column.model');
+const columnSchema = require('../column/column.model');
 
 const boardSchema = new Schema({
   title: {
