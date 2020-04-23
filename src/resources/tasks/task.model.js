@@ -25,6 +25,20 @@ const taskSchema = new Schema({
   }
 });
 
+taskSchema.statics.toResponse = task => {
+  const toString = Object.prototype.toString;
+  if (toString.call(task) === '[object Array]') {
+    const copyArray = task.slice();
+    copyArray.forEach((item, idx, arr) => {
+      const { id, title, order, description, userId, boardId, columnId } = item;
+      arr[idx] = { id, title, order, description, userId, boardId, columnId };
+    });
+    return copyArray;
+  }
+  const { id, title, order, description, userId, boardId, columnId } = task;
+  return { id, title, order, description, userId, boardId, columnId };
+};
+
 module.exports = model('taskSchema', taskSchema);
 
 // class Task {

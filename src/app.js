@@ -30,7 +30,7 @@ app.use('/', (req, res, next) => {
 
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
-app.use('/boards/:id/tasks', tasksRouter);
+app.use('/boards/:boardId/tasks', tasksRouter);
 app.use('*', (req, res, next) => {
   try {
     throw new ErrorHandler(getStatusCode('Not Found'), getStatusText(404));

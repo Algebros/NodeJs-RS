@@ -8,45 +8,51 @@ const { getStatusCode, getStatusText } = require('http-status-codes');
 
 router.route('/').get(
   catchErrors(async (req, res) => {
-    throw new Error('smth went wrong');
-    // const tasks = await taskService.getAll(req.params.id);
-    // res.json(tasks);
+    const task = await taskSchema.find({ boardId: req.params.boardId });
+    res.json(taskSchema.toResponse(task));
   })
 );
 
 router.route('/:id').get(
+  validator,
   catchErrors(async (req, res) => {
-    throw new Error('smth went wrong');
-    // const task = await taskService.getTaskById(req.params.id);
-    // if (!task) {
-    //   throw new ErrorHandler(getStatusCode('Not Found'), getStatusText(404));
-    // }
-    // res.json(task);
+    const task = await taskSchema.findOne({
+      boardId: req.params.boardId,
+      _id: req.params.id
+    });
+    if (task) res.status(getStatusCode('OK')).json(taskSchema.toResponse(task));
+    else throw new ErrorHandler(getStatusCode('Not Found'), getStatusText(404));
   })
 );
 
 router.route('/').post(
   catchErrors(async (req, res) => {
-    const task = await taskSchema.create(req.params.id);
-    // throw await new Error('smth went wrong');
-    // const task = await taskService.createTask(req.params.id, req.body);
-    res.json(task);
+    const task = await taskSchema.create(
+      Object.assign(req.body, { boardId: req.params.boardId })
+    );
+    res.json(taskSchema.toResponse(task));
   })
 );
 
 router.route('/:id').put(
+  validator,
   catchErrors(async (req, res) => {
-    throw new Error('smth went wrong');
-    // const task = await taskService.updateTask(req.params.id, req.body);
-    // res.json(task);
+    const task = await taskSchema.updateOne(
+      { boardId: req.params.boardId, _id: req.params.id },
+      req.body
+    );
+    res.status(getStatusCode('OK')).json(taskSchema.toResponse(task));
   })
 );
 
 router.route('/:id').delete(
+  validator,
   catchErrors(async (req, res) => {
-    throw new Error('smth went wrong');
-    // const task = await taskService.deleteTask(req.params.id);
-    // res.json(task);
+    const task = await taskSchema.deleteOne({
+      boardId: req.params.boardId,
+      _id: req.params.id
+    });
+    res.status(getStatusCode('No Content')).send();
   })
 );
 
