@@ -1,5 +1,7 @@
 const UserSchema = require('./user.model');
 const taskSchema = require('../tasks/task.model');
+const { ErrorHandler } = require('../../helpers/error');
+const { getStatusCode, getStatusText } = require('http-status-codes');
 
 const getAll = async () => {
   const user = await UserSchema.find();
@@ -8,7 +10,8 @@ const getAll = async () => {
 
 const getUserById = async id => {
   const user = await UserSchema.findById(id);
-  return await UserSchema.toResponse(user);
+  if (user) return await UserSchema.toResponse(user);
+  throw new ErrorHandler(getStatusCode('Not Found'), getStatusText(404));
 };
 
 const createUser = async data => {
@@ -17,12 +20,15 @@ const createUser = async data => {
 };
 
 const updateUser = async (id, data) => {
-  return await UserSchema.findByIdAndUpdate(id, data);
+  const user = await UserSchema.findByIdAndUpdate(id, data);
+  if (user) return user;
+  throw new ErrorHandler(getStatusCode('Not Found'), getStatusText(404));
 };
 const deleteUser = async id => {
   const user = await UserSchema.findByIdAndDelete(id);
-  await taskSchema.updateMany({ userId: id }, { userId: null });
-  return user;
+  if (!user) {
+    throw new ErrorHandler(getStatusCode('Not Found'), getStatusText(404));
+  } else await taskSchema.updateMany({ userId: id }, { userId: null });
 };
 
 module.exports = {

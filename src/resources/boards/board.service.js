@@ -1,13 +1,27 @@
-const boardsRepo = require('./board.memory.repository');
-const tasksService = require('../tasks/task.service');
+const boardSchema = require('./board.model');
+const taskSchema = require('../tasks/task.model');
+const { ErrorHandler } = require('../../helpers/error');
+const { getStatusCode, getStatusText } = require('http-status-codes');
 
-const getAll = () => boardsRepo.getAll();
-const createBoard = data => boardsRepo.createBoard(data);
-const getBoardById = id => boardsRepo.getBoardById(id);
-const updateBoard = (id, data) => boardsRepo.updateBoard(id, data);
-const deleteBoard = id => {
-  tasksService.deleteTaskByBoard(id);
-  boardsRepo.deleteBoard(id);
+const getAll = async () => {
+  const board = await boardSchema.find();
+  return await boardSchema.toResponse(board);
+};
+const createBoard = async data => {
+  const board = await boardSchema.create(data);
+  return await boardSchema.toResponse(board);
+};
+const getBoardById = async id => {
+  const board = await boardSchema.findById(id);
+  if (board) return await boardSchema.toResponse(board);
+  throw new ErrorHandler(getStatusCode('Not Found'), getStatusText(404));
+};
+const updateBoard = async (id, data) => {
+  await boardSchema.findByIdAndUpdate(id, data);
+};
+const deleteBoard = async id => {
+  await boardSchema.findByIdAndDelete(id);
+  await taskSchema.deleteMany({ boardId: id });
 };
 
 module.exports = {
