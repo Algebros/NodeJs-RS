@@ -46,19 +46,19 @@ app.use((err, req, res, next) => {
   handleError(err, res);
 });
 
-// process
-//   .on('unhandledRejection', (reason, promise) => {
-//     logger.error({
-//       message: 'Unhandled Rejection',
-//       reason,
-//       promise
-//     });
-//   })
-//   .on('uncaughtException', err => {
-//     logger.error({
-//       message: `Uncaught Exception ${err.message}`,
-//       err
-//     });
-//   });
+process
+  .on('unhandledRejection', (reason, promise) => {
+    logger.error({
+      message: 'Unhandled Rejection',
+      reason,
+      promise
+    });
+  })
+  .on('uncaughtException', err => {
+    logger.error({
+      message: `Uncaught Exception ${err.message}`,
+      err
+    });
+  });
 
 module.exports = app;
