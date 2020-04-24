@@ -7,9 +7,11 @@ const YAML = require('yamljs');
 const { logMiddleware, logger } = require('./middleware/logger');
 const { ErrorHandler, handleError } = require('./helpers/error');
 const { getStatusCode, getStatusText } = require('http-status-codes');
+const loginRouter = require('./resources/login/login.router');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const tasksRouter = require('./resources/tasks/task.router');
+const { guard } = require('./middleware/guard');
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
@@ -28,9 +30,10 @@ app.use('/', (req, res, next) => {
   next();
 });
 
-app.use('/users', userRouter);
-app.use('/boards', boardRouter);
-app.use('/boards/:boardId/tasks', tasksRouter);
+app.use('/login', loginRouter);
+app.use('/users', guard, userRouter);
+app.use('/boards', guard, boardRouter);
+app.use('/boards/:boardId/tasks', guard, tasksRouter);
 app.use('*', (req, res, next) => {
   try {
     throw new ErrorHandler(getStatusCode('Not Found'), getStatusText(404));
@@ -43,19 +46,19 @@ app.use((err, req, res, next) => {
   handleError(err, res);
 });
 
-process
-  .on('unhandledRejection', (reason, promise) => {
-    logger.error({
-      message: 'Unhandled Rejection',
-      reason,
-      promise
-    });
-  })
-  .on('uncaughtException', err => {
-    logger.error({
-      message: `Uncaught Exception ${err.message}`,
-      err
-    });
-  });
+// process
+//   .on('unhandledRejection', (reason, promise) => {
+//     logger.error({
+//       message: 'Unhandled Rejection',
+//       reason,
+//       promise
+//     });
+//   })
+//   .on('uncaughtException', err => {
+//     logger.error({
+//       message: `Uncaught Exception ${err.message}`,
+//       err
+//     });
+//   });
 
 module.exports = app;

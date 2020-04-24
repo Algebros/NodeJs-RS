@@ -11,7 +11,7 @@ mongoose.connect(MONGO_CONNECTION_STRING, {
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
-  db.dropDatabase();
+  // db.dropDatabase();
   console.log('MongoDB connected!');
   app.listen(PORT, () =>
     console.log(`App is running on http://localhost:${PORT}`)
